@@ -1,10 +1,9 @@
 package entity;
 
-import javax.swing.plaf.basic.BasicComboBoxUI;
 import main.GamePanel;
 import main.KeyHandler;
 
-public class Player entends Entity {
+public class Player extends Entity {
 
     GamePanel gp;
     KeyHandler keyH;

@@ -12,17 +12,23 @@ public class Player extends Entity {
     GamePanel gp;
     KeyHandler keyH;
     
+    public final int screenX, screenY;
+
     public Player(GamePanel gp , KeyHandler keyH){
 
         this.gp = gp;
         this.keyH = keyH;
+
+        screenX = gp.screenWidth/2 - (gp.tileSize /2); // multiplied by 3 to match the player scale
+        screenY = gp.screenHeight/2 - (gp.tileSize /2 );  // multiplied by 3 to match the player scale
+
         setDefaultValues(); 
         getPlayerImage();
 
     }
     public void setDefaultValues(){ // set player's default values
-        x = 100;
-        y = 100;
+        worldX = gp.tileSize * 23;
+        worldY = gp.tileSize * 21;
         speed = 2;
         direction = "down";
     }
@@ -50,17 +56,17 @@ public class Player extends Entity {
             
             if (keyH.upPressed == true) {
                 direction = "up";
-                y -= speed;
+                worldY -= speed;
 
             } else if (keyH.downPressed == true) {
                 direction = "down";
-                y += speed;
+                worldY += speed;
             } else if (keyH.leftPressed == true) {
                 direction = "left";
-                x -= speed;
+                worldX -= speed;
             } else if (keyH.rightPressed == true) {
                 direction = "right";
-                x += speed;
+                worldX += speed;
             }
             spriteCounter++;
             if(spriteCounter > 12){
@@ -83,37 +89,25 @@ public class Player extends Entity {
         BufferedImage image = null;
         switch (direction) {
             case "up":
-                if(spriteNum == 1)
-                    image = up1;    
-                if(spriteNum == 2)
-                    image = up2;    
+                image = (spriteNum == 1) ? up1 : (spriteNum == 2) ? up2 : null;
                 break;
             case "down":
-                if(spriteNum == 1)
-                    image = down1;    
-                if(spriteNum == 2)
-                    image = down2;    
+                image = (spriteNum == 1) ? down1 : (spriteNum == 2) ? down2 : null;
                 break;
             case "left":
-                if(spriteNum == 1)
-                    image = left1;    
-                if(spriteNum == 2)
-                    image = left2;    
+                image = (spriteNum == 1) ? left1 : (spriteNum == 2) ? left2 : null;
                 break;
             case "right":
-                if(spriteNum == 1)
-                    image = right1;    
-                if(spriteNum == 2)
-                    image = right2;    
+                image = (spriteNum == 1) ? right1 : (spriteNum == 2) ? right2 : null;
                 break;
-            
         }
 
-        // g2.drawImage(image, x, y, gp.tileSize, gp.tileSize, null);   
+        g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+
         
         // SCALING IMAGE [EXPERIMENTAL]
-        int scaleTile= gp.tileSize * 4; 
-        g2.drawImage(image, x, y, scaleTile, scaleTile, null);
+        // int scaleTile= gp.tileSize * 3; 
+        // g2.drawImage(image, screenX, screenY, scaleTile, scaleTile, null);
         
     }
 }

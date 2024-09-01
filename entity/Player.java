@@ -1,13 +1,14 @@
 package entity;
 
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import main.GamePanel;
 import main.KeyHandler;
 
-public class Player extends Entity {
+public final class Player extends Entity {
 
     GamePanel gp;
     KeyHandler keyH;
@@ -21,6 +22,12 @@ public class Player extends Entity {
 
         screenX = gp.screenWidth/2 - (gp.tileSize /2); // multiplied by 3 to match the player scale
         screenY = gp.screenHeight/2 - (gp.tileSize /2 );  // multiplied by 3 to match the player scale
+
+        solidArea = new Rectangle();
+        solidArea.x=8;
+        solidArea.y=16;
+        solidArea.width=32;
+        solidArea.height=32;
 
         setDefaultValues(); 
         getPlayerImage();
@@ -56,17 +63,32 @@ public class Player extends Entity {
             
             if (keyH.upPressed == true) {
                 direction = "up";
-                worldY -= speed;
+                
 
             } else if (keyH.downPressed == true) {
                 direction = "down";
-                worldY += speed;
+                
             } else if (keyH.leftPressed == true) {
                 direction = "left";
-                worldX -= speed;
+                
             } else if (keyH.rightPressed == true) {
                 direction = "right";
-                worldX += speed;
+                
+            }
+            
+            //check tile collision
+            collisionOn=false;
+            gp.cChecker.checkTile(this);
+            
+            //if collision is false, player can move
+            if(collisionOn == false){
+                switch (direction) {
+                    case "up" -> worldY -= speed;  
+                    case "down" -> worldY += speed; 
+                    case "left" -> worldX -= speed; 
+                    case "right" -> worldX += speed; 
+                    
+                }
             }
             spriteCounter++;
             if(spriteCounter > 12){
@@ -88,18 +110,10 @@ public class Player extends Entity {
 
         BufferedImage image = null;
         switch (direction) {
-            case "up":
-                image = (spriteNum == 1) ? up1 : (spriteNum == 2) ? up2 : null;
-                break;
-            case "down":
-                image = (spriteNum == 1) ? down1 : (spriteNum == 2) ? down2 : null;
-                break;
-            case "left":
-                image = (spriteNum == 1) ? left1 : (spriteNum == 2) ? left2 : null;
-                break;
-            case "right":
-                image = (spriteNum == 1) ? right1 : (spriteNum == 2) ? right2 : null;
-                break;
+            case "up" -> image = (spriteNum == 1) ? up1 : (spriteNum == 2) ? up2 : null;
+            case "down" -> image = (spriteNum == 1) ? down1 : (spriteNum == 2) ? down2 : null;
+            case "left" -> image = (spriteNum == 1) ? left1 : (spriteNum == 2) ? left2 : null;
+            case "right" -> image = (spriteNum == 1) ? right1 : (spriteNum == 2) ? right2 : null;
         }
 
         g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);

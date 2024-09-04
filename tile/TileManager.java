@@ -19,7 +19,7 @@ public final class TileManager {
         tile = new Tile[10];
         mapTileNum = new int[gp.maxWorldCol][gp.maxWorldRow];
         getTileImage();
-        loadMap("/res/maps/world01.txt");
+        loadMap("/res/maps/world01.csv");
     }
 
     public void getTileImage() {
@@ -66,7 +66,7 @@ public final class TileManager {
                 
                 while(col < gp.maxWorldCol) {
                     
-                    String numbers[] = line.split(" ");
+                    String numbers[] = line.split(",");
                     
                     int num = Integer.parseInt(numbers[col]);
                     
@@ -93,6 +93,7 @@ public final class TileManager {
 
         while (worldCol < gp.maxWorldCol && worldRow < gp.maxWorldRow) {
             int tileNum = mapTileNum[worldCol][worldRow];
+            
             int worldX = worldCol * gp.tileSize;
             int worldY = worldRow * gp.tileSize;
             int screenX = worldX - gp.player.worldX + gp.player.screenX;

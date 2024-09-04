@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import javax.swing.JPanel;
+import object.SuperObject;
 import tile.TileManager;
 
 public class GamePanel extends JPanel implements Runnable {
@@ -32,7 +33,9 @@ public class GamePanel extends JPanel implements Runnable {
     KeyHandler keyH = new KeyHandler();
     Thread gameThread;
     public CollisionChecker cChecker = new CollisionChecker(this);
+    public AssetSetter aSetter = new AssetSetter(this);
     public Player player = new Player(this, keyH);
+    public SuperObject obj[] = new SuperObject[10];
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -41,44 +44,15 @@ public class GamePanel extends JPanel implements Runnable {
         this.addKeyListener(keyH);
         this.setFocusable(true);
     }
+    public void setupGame() {
+        aSetter.setObject();
+    }
 
     public void startGameThread() {
         gameThread = new Thread(this);
         gameThread.start();
     }
 
-    // @Override
-    // public void run() {
-    //
-    //     double drawInterval = 1000000000 / FPS; // 0.01666 seconds
-    //     double nextDrawTime = System.nanoTime() + drawInterval;
-
-    //     while (gameThread != null) {
-
-    //         // 1. UPDATE : update information such as character position
-    //         update();
-    //         // 2. DRAW : draw the screen with updated information
-    //         repaint();
-
-    //
-    //         try {
-    //             double remainingTime = nextDrawTime - System.nanoTime();
-    //             remainingTime = remainingTime / 1000000;
-
-    //             if (remainingTime < 0) {
-    //                 remainingTime = 0;
-    //             }
-    //             Thread.sleep((long) remainingTime);
-
-    //             nextDrawTime += drawInterval;
-
-    //         } catch (InterruptedException e) {
-    //             // TODO Auto-generated catch block
-
-    //         }
-
-    //     }
-    // }
     @Override
     public void run() {
         double drawInterval = 1000000000 / FPS;
@@ -123,8 +97,17 @@ public class GamePanel extends JPanel implements Runnable {
 
         Graphics2D g2 = (Graphics2D) g;
 
+        //tile
         tileM.draw(g2);
 
+        //object
+        for (SuperObject obj1 : obj) {
+            if (obj1 != null) {
+                obj1.draw(g2, this);
+            }
+        }
+        
+        //player
         player.draw(g2);
         
         g2.dispose();

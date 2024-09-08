@@ -12,10 +12,11 @@ public final class Player extends Entity {
 
     GamePanel gp;
     KeyHandler keyH;
-    public BufferedImage up1, up2, up3, up4, down1, down2, down3, down4;
-    public BufferedImage left1, left2, left3, left4 , right1, right2, right3, right4;
+
 
     public final int screenX, screenY;
+    int hasKey = 0;
+
 
     public Player(GamePanel gp , KeyHandler keyH){
 
@@ -30,6 +31,8 @@ public final class Player extends Entity {
         solidArea.y=16;
         solidArea.width=32;
         solidArea.height=32;
+        solidAreaDefaultX = solidArea.x;
+        solidAreaDefaultY = solidArea.y;
 
         setDefaultValues(); 
         getPlayerImage();
@@ -65,7 +68,6 @@ public final class Player extends Entity {
             up4 = ImageIO.read(getClass().getResource("/res/player-walk/up003.png"));
             
         } catch (IOException e) {
-            e.printStackTrace();
         } catch (IllegalArgumentException e) {
             System.err.println("Image file not found: " + e.getMessage());
         }
@@ -90,7 +92,11 @@ public final class Player extends Entity {
             //check tile collision
             collisionOn=false;
             gp.cChecker.checkTile(this);
-            
+
+            // check object collision
+            int objIndex = gp.cChecker.checkObject(this, true);
+            pickUpObject(objIndex);
+
             //if collision is false, player can move
             if(collisionOn == false){
                 switch (direction) {
@@ -108,6 +114,29 @@ public final class Player extends Entity {
                     spriteNum = 1;
                 }
                 spriteCounter = 0;
+            }
+        }
+
+    }
+    public void pickUpObject(int i){
+        if(i != 999){
+            String objectName = gp.obj[i].name;
+
+            switch(objectName){
+                case "Key" -> {
+                    hasKey++;
+                    gp.obj[i] = null;
+                    System.out.println("Key: " + hasKey);
+                }
+                
+                case "Chest" -> { 
+                    if(hasKey > 0){
+                        hasKey--;
+                        gp.obj[i] = null;
+                        System.out.println("Key: " + hasKey);
+                    
+                    }
+                }
             }
         }
 

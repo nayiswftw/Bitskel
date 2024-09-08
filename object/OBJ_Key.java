@@ -10,7 +10,7 @@ public class OBJ_Key extends SuperObject {
             image = ImageIO.read(getClass().getResource("/res/objects/key.png"));
         }
         catch(IOException e){
-            e.printStackTrace();
         }
+         solidArea.x=5;
     }
 }

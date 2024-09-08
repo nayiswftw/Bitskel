@@ -16,46 +16,62 @@ public final class TileManager {
 
     public TileManager(GamePanel gp) {
         this.gp = gp;
-        tile = new Tile[10];
+        tile = new Tile[72];
         mapTileNum = new int[gp.maxWorldCol][gp.maxWorldRow];
         getTileImage();
-        loadMap("/res/maps/world01.csv");
+        loadMap("/res/maps/map.txt");
     }
 
     public void getTileImage() {
 
-        try {
+        // try {
             
-            tile[0]= new Tile();
-            tile[0].image = ImageIO.read(getClass().getResource("/res/tiles/grass.png"));
+        //     tile[0]= new Tile();
+        //     tile[0].image = ImageIO.read(getClass().getResource("/res/tiles/grass.png"));
         
-            tile[1]= new Tile();
-            tile[1].image = ImageIO.read(getClass().getResource("/res/tiles/wall.png"));
-            tile[1].collision = true;
+        //     tile[1]= new Tile();
+        //     tile[1].image = ImageIO.read(getClass().getResource("/res/tiles/wall.png"));
+        //     tile[1].collision = true;
         
-            tile[2]= new Tile();
-            tile[2].image = ImageIO.read(getClass().getResource("/res/tiles/water.png"));
-            tile[2].collision = true;
+        //     tile[2]= new Tile();
+        //     tile[2].image = ImageIO.read(getClass().getResource("/res/tiles/water.png"));
+        //     tile[2].collision = true;
         
-            tile[3]= new Tile();
-            tile[3].image = ImageIO.read(getClass().getResource("/res/tiles/earth.png"));
+        //     tile[3]= new Tile();
+        //     tile[3].image = ImageIO.read(getClass().getResource("/res/tiles/earth.png"));
         
-            tile[4]= new Tile();
-            tile[4].image = ImageIO.read(getClass().getResource("/res/tiles/tree.png"));
-            tile[4].collision = true;
+        //     tile[4]= new Tile();
+        //     tile[4].image = ImageIO.read(getClass().getResource("/res/tiles/tree.png"));
+        //     tile[4].collision = true;
         
-            tile[5]= new Tile();
-            tile[5].image = ImageIO.read(getClass().getResource("/res/tiles/sand.png"));
+        //     tile[5]= new Tile();
+        //     tile[5].image = ImageIO.read(getClass().getResource("/res/tiles/sand.png"));
         
-        } catch(IOException e) {
+        // } catch(IOException e) {
+        //     e.printStackTrace();
+            
+        // }
+
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/res/maps/tiledata.txt")))) {
+            String line;
+            int i = 0;
+            while ((line = br.readLine()) != null) {
+                tile[i] = new Tile();
+                tile[i].image = ImageIO.read(getClass().getResource("/res/tiles/" + line));
+                line = br.readLine();
+                tile[i].collision = Boolean.parseBoolean(line);
+                i++;
+            }
+            
+        } catch (IOException e) {
             e.printStackTrace();
-            
         }
     }
     
     public void loadMap(String filePath){
      
         InputStream is = getClass().getResourceAsStream(filePath);
+        
         try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
             int col = 0;
             int row = 0;
@@ -66,7 +82,7 @@ public final class TileManager {
                 
                 while(col < gp.maxWorldCol) {
                     
-                    String numbers[] = line.split(",");
+                    String numbers[] = line.split(" ");
                     
                     int num = Integer.parseInt(numbers[col]);
                     

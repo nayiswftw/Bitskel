@@ -124,6 +124,7 @@ public final class Player extends Entity {
 
             switch(objectName){
                 case "Key" -> {
+                    gp.playSE(3);
                     hasKey++;
                     gp.obj[i] = null;
                     System.out.println("Key: " + hasKey);
@@ -132,11 +133,18 @@ public final class Player extends Entity {
                 case "Chest" -> { 
                     if(hasKey > 0){
                         hasKey--;
+                        gp.playSE(2);
                         gp.obj[i] = null;
-                        System.out.println("Key: " + hasKey);
-                    
+                        System.out.println("Key: " + hasKey);     
                     }
                 }
+                case "Boots" -> {
+                    gp.playSE(1);
+                    speed+= 2;
+                    gp.obj[i] = null;
+                    break;
+            }
+
             }
         }
 

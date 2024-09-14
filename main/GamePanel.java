@@ -30,13 +30,16 @@ public class GamePanel extends JPanel implements Runnable {
 
     TileManager tileM = new TileManager(this);
     KeyHandler keyH = new KeyHandler();
-    Sound sound = new Sound();
+    Sound music = new Sound();
+    Sound se = new Sound();
     public CollisionChecker cChecker = new CollisionChecker(this);
     public AssetSetter aSetter = new AssetSetter(this);
     public Player player = new Player(this, keyH);
     public SuperObject obj[] = new SuperObject[10];
+    public UI uI = new UI(this);
     Thread gameThread;
 
+  
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -96,7 +99,6 @@ public class GamePanel extends JPanel implements Runnable {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-
         Graphics2D g2 = (Graphics2D) g;
 
         //tile
@@ -111,22 +113,26 @@ public class GamePanel extends JPanel implements Runnable {
         
         //player
         player.draw(g2);
+
+        //UI
+        uI.draw(g2);
         
         g2.dispose();
 
     }
     public void playMusic(int i ){
-        sound.setFile(i);
-        sound.play();
-        sound.loop();
+        music.setFile(i);
+        // music.play();    //yea isliy hua 
+        music.loop();
 
     }
     public void stopMusic(){
-        sound.stop();
+         music.stop();
     }
     public void playSE(int i){
-        sound.setFile(i);
-        sound.play();
+        se.setFile(i);
+        se.play();
+        
     }
 }
 

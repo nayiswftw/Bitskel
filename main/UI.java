@@ -71,8 +71,8 @@ public class UI {
         else{
         g2.setFont(arial_40);
         g2.setColor(Color.white);
-        g2.drawImage(keyImage, gp.tileSize/2, gp.tileSize/2,gp.tileSize,gp.tileSize,null);
-        g2.drawString(" x " + gp.player.hasKey, 40, 50);
+        g2.drawImage(keyImage , gp.tileSize/2, gp.tileSize/2,gp.tileSize,gp.tileSize,null);
+        g2.drawString("  x " + gp.player.hasKey, 50,60);
          
         //Time
         playTime += (double)1/60;

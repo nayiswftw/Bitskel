@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import main.GamePanel;
 
 public class SuperObject {
+    // Default values for all objects
     public BufferedImage image;
     public String name;
     public boolean collision = false; 

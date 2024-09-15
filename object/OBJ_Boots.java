@@ -10,7 +10,6 @@ public class OBJ_Boots extends SuperObject{
             image = ImageIO.read(getClass().getResourceAsStream("/res/objects/Boots.png"));
         }
         catch(IOException e){
-            e.printStackTrace();
         }
     }
 }

@@ -14,36 +14,39 @@ public final class Player extends Entity {
     KeyHandler keyH;
     public final int screenX, screenY;
     public int hasKey = 0;
+    int standCounter = 0;
+    boolean moving = false;
+    int pixelCounter = 0;
 
-
-    public Player(GamePanel gp , KeyHandler keyH){
+    public Player(GamePanel gp, KeyHandler keyH) {
 
         this.gp = gp;
         this.keyH = keyH;
 
-        screenX = gp.screenWidth/2 - (gp.tileSize /2); // multiplied by 3 to match the player scale
-        screenY = gp.screenHeight/2 - (gp.tileSize /2 );  // multiplied by 3 to match the player scale
+        screenX = gp.screenWidth / 2 - (gp.tileSize / 2); // multiplied by 3 to match the player scale
+        screenY = gp.screenHeight / 2 - (gp.tileSize / 2);  // multiplied by 3 to match the player scale
 
         solidArea = new Rectangle();
-        solidArea.x=8;
-        solidArea.y=16;
-        solidArea.width=32;
-        solidArea.height=32;
+        solidArea.x = 1;
+        solidArea.y = 1;
+        solidArea.width = 46;
+        solidArea.height = 46;
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
 
-        setDefaultValues(); 
+        setDefaultValues();
         getPlayerImage();
 
     }
-    public void setDefaultValues(){ // set player's default values
+
+    public void setDefaultValues() { // set player's default values
         worldX = gp.tileSize * 13;
         worldY = gp.tileSize * 10;
         speed = 3;
         direction = "down";
     }
 
-    public void getPlayerImage(){
+    public void getPlayerImage() {
         try {
             down1 = ImageIO.read(getClass().getResource("/res/player-walk/down000.png"));
             down2 = ImageIO.read(getClass().getResource("/res/player-walk/down001.png"));
@@ -64,45 +67,64 @@ public final class Player extends Entity {
             up2 = ImageIO.read(getClass().getResource("/res/player-walk/up001.png"));
             up3 = ImageIO.read(getClass().getResource("/res/player-walk/up002.png"));
             up4 = ImageIO.read(getClass().getResource("/res/player-walk/up003.png"));
-            
+
         } catch (IOException e) {
         } catch (IllegalArgumentException e) {
             System.err.println("Image file not found: " + e.getMessage());
         }
     }
+
     public void update() {
-        if (keyH.upPressed == true || keyH.downPressed == true || keyH.leftPressed == true || keyH.rightPressed == true) {
-            
-            if (keyH.upPressed == true) {
-                direction = "up";
 
-            } else if (keyH.downPressed == true) {
-                direction = "down";
-                
-            } else if (keyH.leftPressed == true) {
-                direction = "left";
-                
-            } else if (keyH.rightPressed == true) {
-                direction = "right";
-                
+        if (moving == false) {
+            if (keyH.upPressed == true || keyH.downPressed == true || keyH.leftPressed == true || keyH.rightPressed == true) {
+
+                if (keyH.upPressed == true) {
+                    direction = "up";
+
+                } else if (keyH.downPressed == true) {
+                    direction = "down";
+
+                } else if (keyH.leftPressed == true) {
+                    direction = "left";
+
+                } else if (keyH.rightPressed == true) {
+                    direction = "right";
+
+                }
+                moving = true;
+
+                //check tile collision
+                collisionOn = false;
+                gp.cChecker.checkTile(this);
+
+                // check object collision
+                int objIndex = gp.cChecker.checkObject(this, true);
+                pickUpObject(objIndex);
+            } else {
+                standCounter++;
+
+                if (standCounter == 20) {
+                    spriteNum = 1;
+                    standCounter = 0;
+                }
+
             }
-            
-            //check tile collision
-            collisionOn=false;
-            gp.cChecker.checkTile(this);
+        }
 
-            // check object collision
-            int objIndex = gp.cChecker.checkObject(this, true);
-            pickUpObject(objIndex);
-
+        if (moving == true) {
             //if collision is false, player can move
-            if(collisionOn == false){
+            if (collisionOn == false) {
                 switch (direction) {
-                    case "up" -> worldY -= speed;  
-                    case "down" -> worldY += speed; 
-                    case "left" -> worldX -= speed; 
-                    case "right" -> worldX += speed; 
-                    
+                    case "up" ->
+                        worldY -= speed;
+                    case "down" ->
+                        worldY += speed;
+                    case "left" ->
+                        worldX -= speed;
+                    case "right" ->
+                        worldX += speed;
+
                 }
             }
             spriteCounter++;
@@ -113,67 +135,75 @@ public final class Player extends Entity {
                 }
                 spriteCounter = 0;
             }
+            pixelCounter += speed;
+            if (pixelCounter == 48) { 
+                moving = false;
+                pixelCounter = 0;
+                
+            }
+
         }
 
     }
-    public void pickUpObject(int i){
-        if(i != 999){
+
+    public void pickUpObject(int i) {
+        if (i != 999) {
             String objectName = gp.obj[i].name;
 
-            switch(objectName){
+            switch (objectName) {
                 case "Key" -> {
                     gp.playSE(3);
                     hasKey++;
                     gp.obj[i] = null;
                     gp.uI.showMessage("You got a key!");
-                    
-                }
-                
-                case "Boots" -> {
-                    gp.playSE(1);
-                    speed+= 2;
-                    gp.obj[i] = null;
-                    gp.uI.showMessage("You got boots!");
-                   
-                    
+
                 }
 
-                case "Chest" -> { 
-                    gp.uI.gameFinished = true;
+                case "Boots" -> {
+                    gp.playSE(1);
+                    speed += 2;
+                    gp.obj[i] = null;
+                    gp.uI.showMessage("You got boots!");
+
+                }
+
+                case "Chest" -> {
                     gp.stopMusic();
-                    gp.playMusic(0); 
-                    if(hasKey > 0){
+                    gp.playMusic(0);
+                    if (hasKey > 0) {
                         hasKey--;
                         gp.playSE(2);
                         gp.obj[i] = null;
                         gp.uI.showMessage("You opened the chest!");
+                        gp.uI.gameFinished = true;
                         break;
                     }
                 }
-
             }
         }
-
     }
-    public void draw(Graphics2D g2){
+
+    public void draw(Graphics2D g2) {
         // FOR DEBUGGING
         // g2.setColor(Color.white);
         // g2.fillRect(x, y, gp.tileSize, gp.tileSize);
 
         BufferedImage image = null;
         switch (direction) {
-            case "up" -> image = (spriteNum == 1) ? up1 : (spriteNum == 2) ? up2 : (spriteNum == 3) ? up3 : (spriteNum == 4) ? up4 : null;
-            case "down" -> image = (spriteNum == 1) ? down1 : (spriteNum == 2) ? down2 :(spriteNum == 3) ? down3 : (spriteNum == 4) ? down4 : null;
-            case "left" -> image = (spriteNum == 1) ? left1 : (spriteNum == 2) ? left2 :  (spriteNum == 3) ? left3 : (spriteNum == 4) ? left4 : null;
-            case "right" -> image = (spriteNum == 1) ? right1 : (spriteNum == 2) ? right2 : (spriteNum == 3) ? right3 : (spriteNum == 4) ? right4 : null;
+            case "up" ->
+                image = (spriteNum == 1) ? up1 : (spriteNum == 2) ? up2 : (spriteNum == 3) ? up3 : (spriteNum == 4) ? up4 : null;
+            case "down" ->
+                image = (spriteNum == 1) ? down1 : (spriteNum == 2) ? down2 : (spriteNum == 3) ? down3 : (spriteNum == 4) ? down4 : null;
+            case "left" ->
+                image = (spriteNum == 1) ? left1 : (spriteNum == 2) ? left2 : (spriteNum == 3) ? left3 : (spriteNum == 4) ? left4 : null;
+            case "right" ->
+                image = (spriteNum == 1) ? right1 : (spriteNum == 2) ? right2 : (spriteNum == 3) ? right3 : (spriteNum == 4) ? right4 : null;
         }
 
         g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
 
-        
         // SCALING IMAGE [EXPERIMENTAL]
         // int scaleTile= gp.tileSize * 3; 
         // g2.drawImage(image, screenX, screenY, scaleTile, scaleTile, null);
-        
     }
 }

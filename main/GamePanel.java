@@ -10,6 +10,7 @@ import object.SuperObject;
 import tile.TileManager;
 
 public class GamePanel extends JPanel implements Runnable {
+
     // SCREEN SETTINGS  
     final int originalTileSize = 16; // 16x16 tile
     final int scale = 3;
@@ -21,9 +22,8 @@ public class GamePanel extends JPanel implements Runnable {
     public final int screenHeight = tileSize * maxScreenRow; // 576 pixels
 
     // WOLRD SETTINGS
-    public final int maxWorldCol = 50;
-    public final int maxWorldRow = 50;
-    
+    public int maxWorldCol;
+    public int maxWorldRow ;
 
     //FPS
     int FPS = 60;
@@ -39,8 +39,6 @@ public class GamePanel extends JPanel implements Runnable {
     public UI uI = new UI(this);
     Thread gameThread;
 
-  
-
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.BLACK);
@@ -48,6 +46,7 @@ public class GamePanel extends JPanel implements Runnable {
         this.addKeyListener(keyH);
         this.setFocusable(true);
     }
+
     public void setupGame() {
         aSetter.setObject();
         playMusic(0);
@@ -86,54 +85,66 @@ public class GamePanel extends JPanel implements Runnable {
                 drawCount = 0;
                 timer = 0;
 
-                
             }
         }
     }
+
     public void update() {
         player.update();
     }
-
-
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
-        //tile
-        tileM.draw(g2);
-
-        //object
-        for (SuperObject obj1 : obj) {
-            if (obj1 != null) {
-                obj1.draw(g2, this);
-            }
+        //DEBUG
+        long drawStart = 0;
+        if (keyH.checkDrawTime == true) {
+            drawStart = System.nanoTime();
         }
-        
-        //player
-        player.draw(g2);
+            //tile
+            tileM.draw(g2);
 
-        //UI
-        uI.draw(g2);
-        
-        g2.dispose();
+            //object
+            for (SuperObject obj1 : obj) {
+                if (obj1 != null) {
+                    obj1.draw(g2, this);
+                }
+            }
 
-    }
-    public void playMusic(int i ){
+            //player
+            player.draw(g2);
+
+            //UI
+            uI.draw(g2);
+
+            //DEBUG
+            if (keyH.checkDrawTime == true) {
+                long drawEnd = System.nanoTime();
+                long passed = drawEnd - drawStart;
+                g2.setColor(Color.white);
+                g2.drawString("Draw Time :" + passed, 10, 400);
+                System.out.println("Draw Time :" + passed);
+            }
+            g2.dispose();
+        }
+    
+
+    public void playMusic(int i) {
         music.setFile(i);
-        music.play();   
+        music.play();
         music.loop();
 
     }
-    public void stopMusic(){
-         music.stop();
+
+    public void stopMusic() {
+        music.stop();
     }
-    public void playSE(int i){
+
+    public void playSE(int i) {
         se.setFile(i);
         se.play();
-        
+
     }
 }
-
-

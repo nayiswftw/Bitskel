@@ -3,10 +3,10 @@ package entity;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import javax.imageio.ImageIO;
 import main.GamePanel;
 import main.KeyHandler;
+import main.UtilityTool;
 
 public final class Player extends Entity {
 
@@ -42,38 +42,49 @@ public final class Player extends Entity {
     public void setDefaultValues() { // set player's default values
         worldX = gp.tileSize * 13;
         worldY = gp.tileSize * 10;
-        speed = 3;
+        speed = 4;
         direction = "down";
     }
 
     public void getPlayerImage() {
-        try {
-            down1 = ImageIO.read(getClass().getResource("/res/player-walk/down000.png"));
-            down2 = ImageIO.read(getClass().getResource("/res/player-walk/down001.png"));
-            down3 = ImageIO.read(getClass().getResource("/res/player-walk/down002.png"));
-            down4 = ImageIO.read(getClass().getResource("/res/player-walk/down003.png"));
+        
+            down1 = setup("down000");
+            down1 = setup("down001");
+            down1 = setup("down002");
+            down1 = setup("down003");
 
-            left1 = ImageIO.read(getClass().getResource("/res/player-walk/left000.png"));
-            left2 = ImageIO.read(getClass().getResource("/res/player-walk/left001.png"));
-            left3 = ImageIO.read(getClass().getResource("/res/player-walk/left002.png"));
-            left4 = ImageIO.read(getClass().getResource("/res/player-walk/left003.png"));
+            left1 = setup("left000");
+            left1 = setup("left001");
+            left1 = setup("left002");
+            left1 = setup("left003");
 
-            right1 = ImageIO.read(getClass().getResource("/res/player-walk/right000.png"));
-            right2 = ImageIO.read(getClass().getResource("/res/player-walk/right001.png"));
-            right3 = ImageIO.read(getClass().getResource("/res/player-walk/right002.png"));
-            right4 = ImageIO.read(getClass().getResource("/res/player-walk/right003.png"));
+            right1 = setup("right000");
+            right1 = setup("right001");
+            right1 = setup("right002");
+            right1 = setup("right003");
 
-            up1 = ImageIO.read(getClass().getResource("/res/player-walk/up000.png"));
-            up2 = ImageIO.read(getClass().getResource("/res/player-walk/up001.png"));
-            up3 = ImageIO.read(getClass().getResource("/res/player-walk/up002.png"));
-            up4 = ImageIO.read(getClass().getResource("/res/player-walk/up003.png"));
+            up1 = setup("up000");
+            up1 = setup("up001");
+            up1 = setup("up002");
+            up1 = setup("up003");
 
-        } catch (IOException e) {
-        } catch (IllegalArgumentException e) {
-            System.err.println("Image file not found: " + e.getMessage());
-        }
+    
+        
+
     }
+    public BufferedImage setup(String imageName) {
+        UtilityTool uTool = new UtilityTool();
+        BufferedImage image = null;
 
+        try {
+            image = ImageIO.read(getClass().getResource("/res/player-walk/"+imageName+".png"));
+            image = uTool.scaleImage(image,gp.tileSize,gp.tileSize);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return image;
+
+    }
     public void update() {
 
         if (moving == false) {
@@ -189,6 +200,7 @@ public final class Player extends Entity {
         // g2.fillRect(x, y, gp.tileSize, gp.tileSize);
 
         BufferedImage image = null;
+        
         switch (direction) {
             case "up" ->
                 image = (spriteNum == 1) ? up1 : (spriteNum == 2) ? up2 : (spriteNum == 3) ? up3 : (spriteNum == 4) ? up4 : null;
@@ -200,7 +212,7 @@ public final class Player extends Entity {
                 image = (spriteNum == 1) ? right1 : (spriteNum == 2) ? right2 : (spriteNum == 3) ? right3 : (spriteNum == 4) ? right4 : null;
         }
 
-        g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+        g2.drawImage(image, screenX, screenY,  null);
 
         // SCALING IMAGE [EXPERIMENTAL]
         // int scaleTile= gp.tileSize * 3; 

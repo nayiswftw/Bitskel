@@ -7,14 +7,14 @@ import main.GamePanel;
 public class OBJ_Key extends SuperObject {
 
     GamePanel gp;
+
     public OBJ_Key(GamePanel gp) {
         name = "Key";
-        try{
+        try {
             image = ImageIO.read(getClass().getResource("/res/objects/key.png"));
-            uTool.scaleImage(image, gp.tileSize, gp.tileSize);
+            image = uTool.scaleImage(image, gp.tileSize, gp.tileSize);
+        } catch (IOException e) {
         }
-        catch(IOException e){
-        }
-         solidArea.x=5;
+        solidArea.x = 5;
     }
 }

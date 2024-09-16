@@ -10,6 +10,7 @@ public class AssetSetter {
     public AssetSetter(GamePanel gp) {
         this.gp = gp;
     }
+
     public void setObject() {
         gp.obj[0] = new OBJ_Key(gp);
         gp.obj[0].worldX = 13 * gp.tileSize;
@@ -19,13 +20,9 @@ public class AssetSetter {
         gp.obj[1].worldX = 30 * gp.tileSize;
         gp.obj[1].worldY = 23 * gp.tileSize;
 
-
         gp.obj[2] = new OBJ_Boots(gp);
         gp.obj[2].worldX = 10 * gp.tileSize;
         gp.obj[2].worldY = 17 * gp.tileSize;
-
-        
-
 
     }
 }

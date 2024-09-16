@@ -11,7 +11,7 @@ import tile.TileManager;
 
 public class GamePanel extends JPanel implements Runnable {
 
-    // SCREEN SETTINGS  
+    // SCREEN SETTINGS
     final int originalTileSize = 16; // 16x16 tile
     final int scale = 3;
 
@@ -23,9 +23,9 @@ public class GamePanel extends JPanel implements Runnable {
 
     // WOLRD SETTINGS
     public int maxWorldCol;
-    public int maxWorldRow ;
+    public int maxWorldRow;
 
-    //FPS
+    // FPS
     int FPS = 60;
 
     TileManager tileM = new TileManager(this);
@@ -98,38 +98,37 @@ public class GamePanel extends JPanel implements Runnable {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
-        //DEBUG
+        // DEBUG
         long drawStart = 0;
         if (keyH.checkDrawTime == true) {
             drawStart = System.nanoTime();
         }
-            //tile
-            tileM.draw(g2);
+        // tile
+        tileM.draw(g2);
 
-            //object
-            for (SuperObject obj1 : obj) {
-                if (obj1 != null) {
-                    obj1.draw(g2, this);
-                }
+        // object
+        for (SuperObject obj1 : obj) {
+            if (obj1 != null) {
+                obj1.draw(g2, this);
             }
-
-            //player
-            player.draw(g2);
-
-            //UI
-            uI.draw(g2);
-
-            //DEBUG
-            if (keyH.checkDrawTime == true) {
-                long drawEnd = System.nanoTime();
-                long passed = drawEnd - drawStart;
-                g2.setColor(Color.white);
-                g2.drawString("Draw Time :" + passed, 10, 400);
-                System.out.println("Draw Time :" + passed);
-            }
-            g2.dispose();
         }
-    
+
+        // player
+        player.draw(g2);
+
+        // UI
+        uI.draw(g2);
+
+        // DEBUG
+        if (keyH.checkDrawTime == true) {
+            long drawEnd = System.nanoTime();
+            long passed = drawEnd - drawStart;
+            g2.setColor(Color.white);
+            g2.drawString("Draw Time :" + passed, 10, 400);
+            System.out.println("Draw Time :" + passed);
+        }
+        g2.dispose();
+    }
 
     public void playMusic(int i) {
         music.setFile(i);

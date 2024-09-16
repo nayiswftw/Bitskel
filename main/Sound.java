@@ -20,23 +20,26 @@ public class Sound {
         soundURL[4] = getClass().getResource("/res/sound/coin2.wav");
         soundURL[5] = getClass().getResource("/res/sound/coin3.wav");
     }
+
     public void setFile(int i) {
-       try {
-           AudioInputStream ais = AudioSystem.getAudioInputStream(soundURL[i]);
-              clip = AudioSystem.getClip();
-              clip.open(ais);
-        }
-        catch (IOException | LineUnavailableException | UnsupportedAudioFileException e) {
+        try {
+            AudioInputStream ais = AudioSystem.getAudioInputStream(soundURL[i]);
+            clip = AudioSystem.getClip();
+            clip.open(ais);
+        } catch (IOException | LineUnavailableException | UnsupportedAudioFileException e) {
             System.out.println("Sound file not found");
         }
     }
-    public void play(){
+
+    public void play() {
         clip.start();
     }
-    public void loop(){
+
+    public void loop() {
         clip.loop(Clip.LOOP_CONTINUOUSLY);
     }
-    public void stop(){
+
+    public void stop() {
         clip.stop();
     }
 }

@@ -24,7 +24,7 @@ public final class Player extends Entity {
         this.keyH = keyH;
 
         screenX = gp.screenWidth / 2 - (gp.tileSize / 2); // multiplied by 3 to match the player scale
-        screenY = gp.screenHeight / 2 - (gp.tileSize / 2);  // multiplied by 3 to match the player scale
+        screenY = gp.screenHeight / 2 - (gp.tileSize / 2); // multiplied by 3 to match the player scale
 
         solidArea = new Rectangle();
         solidArea.x = 1;
@@ -47,48 +47,48 @@ public final class Player extends Entity {
     }
 
     public void getPlayerImage() {
-        
-            down1 = setup("down000");
-            down1 = setup("down001");
-            down1 = setup("down002");
-            down1 = setup("down003");
 
-            left1 = setup("left000");
-            left1 = setup("left001");
-            left1 = setup("left002");
-            left1 = setup("left003");
+        down1 = setup("down000");
+        down2 = setup("down001");
+        down3 = setup("down002");
+        down4 = setup("down003");
 
-            right1 = setup("right000");
-            right1 = setup("right001");
-            right1 = setup("right002");
-            right1 = setup("right003");
+        left1 = setup("left000");
+        left2 = setup("left001");
+        left3 = setup("left002");
+        left4 = setup("left003");
 
-            up1 = setup("up000");
-            up1 = setup("up001");
-            up1 = setup("up002");
-            up1 = setup("up003");
+        right1 = setup("right000");
+        right2 = setup("right001");
+        right3 = setup("right002");
+        right4 = setup("right003");
 
-    
-        
+        up1 = setup("up000");
+        up2 = setup("up001");
+        up3 = setup("up002");
+        up4 = setup("up003");
 
     }
+
     public BufferedImage setup(String imageName) {
         UtilityTool uTool = new UtilityTool();
         BufferedImage image = null;
 
         try {
-            image = ImageIO.read(getClass().getResource("/res/player-walk/"+imageName+".png"));
-            image = uTool.scaleImage(image,gp.tileSize,gp.tileSize);
+            image = ImageIO.read(getClass().getResource("/res/player-walk/" + imageName + ".png"));
+            image = uTool.scaleImage(image, gp.tileSize, gp.tileSize);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return image;
 
     }
+
     public void update() {
 
         if (moving == false) {
-            if (keyH.upPressed == true || keyH.downPressed == true || keyH.leftPressed == true || keyH.rightPressed == true) {
+            if (keyH.upPressed == true || keyH.downPressed == true || keyH.leftPressed == true
+                    || keyH.rightPressed == true) {
 
                 if (keyH.upPressed == true) {
                     direction = "up";
@@ -105,7 +105,7 @@ public final class Player extends Entity {
                 }
                 moving = true;
 
-                //check tile collision
+                // check tile collision
                 collisionOn = false;
                 gp.cChecker.checkTile(this);
 
@@ -115,7 +115,7 @@ public final class Player extends Entity {
             } else {
                 standCounter++;
 
-                if (standCounter == 20) {
+                if (standCounter == 10) {
                     spriteNum = 1;
                     standCounter = 0;
                 }
@@ -124,7 +124,7 @@ public final class Player extends Entity {
         }
 
         if (moving == true) {
-            //if collision is false, player can move
+            // if collision is false, player can move
             if (collisionOn == false) {
                 switch (direction) {
                     case "up" ->
@@ -147,10 +147,10 @@ public final class Player extends Entity {
                 spriteCounter = 0;
             }
             pixelCounter += speed;
-            if (pixelCounter == 48) { 
+            if (pixelCounter == 48) {
                 moving = false;
                 pixelCounter = 0;
-                
+
             }
 
         }
@@ -200,22 +200,21 @@ public final class Player extends Entity {
         // g2.fillRect(x, y, gp.tileSize, gp.tileSize);
 
         BufferedImage image = null;
-        
         switch (direction) {
             case "up" ->
-                image = (spriteNum == 1) ? up1 : (spriteNum == 2) ? up2 : (spriteNum == 3) ? up3 : (spriteNum == 4) ? up4 : null;
+                image = (spriteNum == 1) ? up1
+                        : (spriteNum == 2) ? up2 : (spriteNum == 3) ? up3 : (spriteNum == 4) ? up4 : null;
             case "down" ->
-                image = (spriteNum == 1) ? down1 : (spriteNum == 2) ? down2 : (spriteNum == 3) ? down3 : (spriteNum == 4) ? down4 : null;
+                image = (spriteNum == 1) ? down1
+                        : (spriteNum == 2) ? down2 : (spriteNum == 3) ? down3 : (spriteNum == 4) ? down4 : null;
             case "left" ->
-                image = (spriteNum == 1) ? left1 : (spriteNum == 2) ? left2 : (spriteNum == 3) ? left3 : (spriteNum == 4) ? left4 : null;
+                image = (spriteNum == 1) ? left1
+                        : (spriteNum == 2) ? left2 : (spriteNum == 3) ? left3 : (spriteNum == 4) ? left4 : null;
             case "right" ->
-                image = (spriteNum == 1) ? right1 : (spriteNum == 2) ? right2 : (spriteNum == 3) ? right3 : (spriteNum == 4) ? right4 : null;
+                image = (spriteNum == 1) ? right1
+                        : (spriteNum == 2) ? right2 : (spriteNum == 3) ? right3 : (spriteNum == 4) ? right4 : null;
         }
 
-        g2.drawImage(image, screenX, screenY,  null);
-
-        // SCALING IMAGE [EXPERIMENTAL]
-        // int scaleTile= gp.tileSize * 3; 
-        // g2.drawImage(image, screenX, screenY, scaleTile, scaleTile, null);
+        g2.drawImage(image, screenX, screenY, null);
     }
 }

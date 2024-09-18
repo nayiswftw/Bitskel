@@ -8,12 +8,13 @@ import main.GamePanel;
 import main.KeyHandler;
 import main.UtilityTool;
 
+
 public final class Player extends Entity {
 
     GamePanel gp;
     KeyHandler keyH;
     public final int screenX, screenY;
-    public int hasKey = 0;
+    // public int hasKey = 0;
     int standCounter = 0;
     boolean moving = false;
     int pixelCounter = 0;
@@ -159,45 +160,18 @@ public final class Player extends Entity {
 
     public void pickUpObject(int i) {
         if (i != 999) {
-            String objectName = gp.obj[i].name;
-
-            switch (objectName) {
-                case "Key" -> {
-                    gp.playSE(3);
-                    hasKey++;
-                    gp.obj[i] = null;
-                    gp.uI.showMessage("You got a key!");
-
-                }
-
-                case "Boots" -> {
-                    gp.playSE(1);
-                    speed += 2;
-                    gp.obj[i] = null;
-                    gp.uI.showMessage("You got boots!");
-
-                }
-
-                case "Chest" -> {
-                    gp.stopMusic();
-                    gp.playMusic(0);
-                    if (hasKey > 0) {
-                        hasKey--;
-                        gp.playSE(2);
-                        gp.obj[i] = null;
-                        gp.uI.showMessage("You opened the chest!");
-                        gp.uI.gameFinished = true;
-                        break;
-                    }
-                }
+            
+        
             }
         }
-    }
+
 
     public void draw(Graphics2D g2) {
         // FOR DEBUGGING
         // g2.setColor(Color.white);
         // g2.fillRect(x, y, gp.tileSize, gp.tileSize);
+        // g2.drawString("Playtime: " + dFormat.format(playTime), 50, 50);
+
 
         BufferedImage image = null;
         switch (direction) {
@@ -218,3 +192,4 @@ public final class Player extends Entity {
         g2.drawImage(image, screenX, screenY, null);
     }
 }
+

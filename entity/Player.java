@@ -3,25 +3,24 @@ package entity;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
 import main.GamePanel;
 import main.KeyHandler;
-import main.UtilityTool;
 
 
 public final class Player extends Entity {
 
-    GamePanel gp;
+   
     KeyHandler keyH;
     public final int screenX, screenY;
-    // public int hasKey = 0;
+   
     int standCounter = 0;
     boolean moving = false;
     int pixelCounter = 0;
 
     public Player(GamePanel gp, KeyHandler keyH) {
 
-        this.gp = gp;
+        super(gp);
+    
         this.keyH = keyH;
 
         screenX = gp.screenWidth / 2 - (gp.tileSize / 2); // multiplied by 3 to match the player scale
@@ -48,6 +47,7 @@ public final class Player extends Entity {
     }
 
     public void getPlayerImage() {
+        // image is same as player h
 
         down1 = setup("down000");
         down2 = setup("down001");
@@ -71,20 +71,7 @@ public final class Player extends Entity {
 
     }
 
-    public BufferedImage setup(String imageName) {
-        UtilityTool uTool = new UtilityTool();
-        BufferedImage image = null;
-
-        try {
-            image = ImageIO.read(getClass().getResource("/res/player-walk/" + imageName + ".png"));
-            image = uTool.scaleImage(image, gp.tileSize, gp.tileSize);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return image;
-
-    }
-
+    
     public void update() {
 
         if (moving == false) {
@@ -113,16 +100,19 @@ public final class Player extends Entity {
                 // check object collision
                 int objIndex = gp.cChecker.checkObject(this, true);
                 pickUpObject(objIndex);
-            } else {
+             }
+             else {
                 standCounter++;
-
                 if (standCounter == 10) {
                     spriteNum = 1;
                     standCounter = 0;
                 }
-
             }
         }
+
+        //check  npc collision
+        int npcIndex = gp.cChecker.checkEntity(this, gp.npc);
+        interactNPC(npcIndex);
 
         if (moving == true) {
             // if collision is false, player can move
@@ -153,7 +143,6 @@ public final class Player extends Entity {
                 pixelCounter = 0;
 
             }
-
         }
 
     }
@@ -164,16 +153,22 @@ public final class Player extends Entity {
         
             }
         }
+   public void interactNPC(int i){
+    if (i != 999) {
+           System.out.println("you are hitting an npc!"); 
+        
+    }
+   }
 
-
-    public void draw(Graphics2D g2) {
+    @Override
+    public void draw(Graphics2D g2, GamePanel aThis) {
         // FOR DEBUGGING
         // g2.setColor(Color.white);
         // g2.fillRect(x, y, gp.tileSize, gp.tileSize);
         // g2.drawString("Playtime: " + dFormat.format(playTime), 50, 50);
 
-
         BufferedImage image = null;
+
         switch (direction) {
             case "up" ->
                 image = (spriteNum == 1) ? up1

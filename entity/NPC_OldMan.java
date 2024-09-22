@@ -10,6 +10,7 @@ public class NPC_OldMan extends Entity {
         direction = "down";
         speed = 1;
         getImage();
+        setDialogue();
      }
 
     public void getImage() {
@@ -35,6 +36,13 @@ public class NPC_OldMan extends Entity {
         up4 = setup("up003");
 
     }
+    public void setDialogue() {
+        dialogues[0] = "Hello , lad !!";
+        dialogues[1] = "So have you come to this insland to \n find the treasure?";
+        dialogues[2] = "I used to be a great wizard but now...\n  I'm a bit too old for taking an adventure.";
+        dialogues[3] = "Well, good luck on you.";
+
+    }
      @Override
     public void setAction(){
         ActionLookCounter ++;
@@ -56,6 +64,12 @@ public class NPC_OldMan extends Entity {
         }
         ActionLookCounter=0;
     }}
+ 
+     @Override
+ public void speak(){
+    super.speak();
+}
+   
  }
 
     

@@ -6,13 +6,11 @@ import java.awt.image.BufferedImage;
 import main.GamePanel;
 import main.KeyHandler;
 
-
 public final class Player extends Entity {
 
-   
     KeyHandler keyH;
     public final int screenX, screenY;
-   
+
     int standCounter = 0;
     boolean moving = false;
     int pixelCounter = 0;
@@ -20,7 +18,7 @@ public final class Player extends Entity {
     public Player(GamePanel gp, KeyHandler keyH) {
 
         super(gp);
-    
+
         this.keyH = keyH;
 
         screenX = gp.screenWidth / 2 - (gp.tileSize / 2); // multiplied by 3 to match the player scale
@@ -71,7 +69,6 @@ public final class Player extends Entity {
 
     }
 
-    
     public void update() {
 
         if (moving == false) {
@@ -100,8 +97,7 @@ public final class Player extends Entity {
                 // check object collision
                 int objIndex = gp.cChecker.checkObject(this, true);
                 pickUpObject(objIndex);
-             }
-             else {
+            } else {
                 standCounter++;
                 if (standCounter == 10) {
                     spriteNum = 1;
@@ -149,16 +145,20 @@ public final class Player extends Entity {
 
     public void pickUpObject(int i) {
         if (i != 999) {
-            
-        
+
+        }
+    }
+
+    public void interactNPC(int i) {
+        if (i != 999) {
+
+            if (gp.keyH.enterPressed == true) {
+                gp.gameState = gp.dialogueState;
+                gp.npc[i].speak();
             }
         }
-   public void interactNPC(int i){
-    if (i != 999) {
-           System.out.println("you are hitting an npc!"); 
-        
+        gp.keyH.enterPressed = false;
     }
-   }
 
     @Override
     public void draw(Graphics2D g2, GamePanel aThis) {
@@ -187,4 +187,3 @@ public final class Player extends Entity {
         g2.drawImage(image, screenX, screenY, null);
     }
 }
-

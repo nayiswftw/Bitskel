@@ -5,7 +5,6 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.text.DecimalFormat;
 
-
 public class UI {
 
     GamePanel gp;
@@ -15,7 +14,6 @@ public class UI {
     public boolean messageOn = false;
     public String message = "";
     int messageCounter = 0;
-    
 
     public boolean gameFinished = false;
 
@@ -59,7 +57,7 @@ public class UI {
 
         g2.drawString(text, x, y);
 
-        g2.setFont(arial_80B); 
+        g2.setFont(arial_80B);
 
     }
 

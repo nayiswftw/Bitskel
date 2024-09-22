@@ -1,6 +1,6 @@
 package main;
 
-import entity.NPC_OldMan;
+import entity.NPC_Frog;
 
 public class AssetSetter {
     GamePanel gp;
@@ -10,13 +10,13 @@ public class AssetSetter {
     }
 
     public void setObject() {
-       
-    }
-    public void setNPC() {
-        gp.npc[0] = new NPC_OldMan(gp);
-        gp.npc[0].worldX = gp.tileSize*21;
-        gp.npc[0].worldY = gp.tileSize*21;
 
+    }
+
+    public void setNPC() {
+        gp.npc[0] = new NPC_Frog(gp);
+        gp.npc[0].worldX = gp.tileSize * 12;
+        gp.npc[0].worldY = gp.tileSize * 11;
 
     }
 }

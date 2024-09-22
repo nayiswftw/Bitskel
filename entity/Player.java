@@ -3,16 +3,20 @@ package entity;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 import main.GamePanel;
 import main.KeyHandler;
 
-
 public final class Player extends Entity {
 
-   
+    public BufferedImage up1, up2, up3, up4, up5, up6, down1, down2, down3, down4, down5, down6;
+    public BufferedImage left1, left2, left3, left4, left5, left6, right1, right2, right3, right4, right5, right6;
+
     KeyHandler keyH;
     public final int screenX, screenY;
-   
+
     int standCounter = 0;
     boolean moving = false;
     int pixelCounter = 0;
@@ -20,7 +24,7 @@ public final class Player extends Entity {
     public Player(GamePanel gp, KeyHandler keyH) {
 
         super(gp);
-    
+
         this.keyH = keyH;
 
         screenX = gp.screenWidth / 2 - (gp.tileSize / 2); // multiplied by 3 to match the player scale
@@ -47,31 +51,44 @@ public final class Player extends Entity {
     }
 
     public void getPlayerImage() {
-        // image is same as player h
+        BufferedImage image;
+        try {
+            image = ImageIO.read(getClass().getResource("/res/player/player-run.png"));
 
-        down1 = setup("down000");
-        down2 = setup("down001");
-        down3 = setup("down002");
-        down4 = setup("down003");
 
-        left1 = setup("left000");
-        left2 = setup("left001");
-        left3 = setup("left002");
-        left4 = setup("left003");
+            down1 = setup(image.getSubimage(0, 0, 16, 16));
+            down2 = setup(image.getSubimage(16, 0, 16, 16));
+            down3 = setup(image.getSubimage(32, 0, 16, 16));
+            down4 = setup(image.getSubimage(48, 0, 16, 16));
+            down5 = setup(image.getSubimage(64, 0, 16, 16));
+            down6 = setup(image.getSubimage(80, 0, 16, 16));
+            
+            up1 = setup(image.getSubimage(0, 16, 16, 16));         
+            up2 = setup(image.getSubimage(16, 16, 16, 16));         
+            up3 = setup(image.getSubimage(32, 16, 16, 16));         
+            up4 = setup(image.getSubimage(48, 16, 16, 16));
+            up5 = setup(image.getSubimage(64, 16, 16, 16));
+            up6 = setup(image.getSubimage(80, 16, 16, 16));
 
-        right1 = setup("right000");
-        right2 = setup("right001");
-        right3 = setup("right002");
-        right4 = setup("right003");
+            left1 = setup(image.getSubimage(0, 32, 16, 16));
+            left2 = setup(image.getSubimage(16, 32, 16, 16));
+            left3 = setup(image.getSubimage(32, 32, 16, 16));
+            left4 = setup(image.getSubimage(48, 32, 16, 16));
+            left5 = setup(image.getSubimage(64, 32, 16, 16));
+            left6 = setup(image.getSubimage(80, 32, 16, 16));
 
-        up1 = setup("up000");
-        up2 = setup("up001");
-        up3 = setup("up002");
-        up4 = setup("up003");
-
+            right1 = setup(image.getSubimage(0, 48, 16, 16));
+            right2 = setup(image.getSubimage(16, 48, 16, 16));
+            right3 = setup(image.getSubimage(32, 48, 16, 16));
+            right4 = setup(image.getSubimage(48, 48, 16, 16));
+            right5 = setup(image.getSubimage(64, 48, 16, 16));
+            right6 = setup(image.getSubimage(80, 48, 16, 16));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
-    
     public void update() {
 
         if (moving == false) {
@@ -100,8 +117,7 @@ public final class Player extends Entity {
                 // check object collision
                 int objIndex = gp.cChecker.checkObject(this, true);
                 pickUpObject(objIndex);
-             }
-             else {
+            } else {
                 standCounter++;
                 if (standCounter == 10) {
                     spriteNum = 1;
@@ -110,7 +126,7 @@ public final class Player extends Entity {
             }
         }
 
-        //check  npc collision
+        // check npc collision
         int npcIndex = gp.cChecker.checkEntity(this, gp.npc);
         interactNPC(npcIndex);
 
@@ -132,7 +148,7 @@ public final class Player extends Entity {
             spriteCounter++;
             if (spriteCounter > 12) {
                 spriteNum++;
-                if (spriteNum > 4) {
+                if (spriteNum > 6) {
                     spriteNum = 1;
                 }
                 spriteCounter = 0;
@@ -149,16 +165,16 @@ public final class Player extends Entity {
 
     public void pickUpObject(int i) {
         if (i != 999) {
-            
-        
-            }
+
         }
-   public void interactNPC(int i){
-    if (i != 999) {
-           System.out.println("you are hitting an npc!"); 
-        
     }
-   }
+
+    public void interactNPC(int i) {
+        if (i != 999) {
+            System.out.println("you are hitting an npc!");
+
+        }
+    }
 
     @Override
     public void draw(Graphics2D g2, GamePanel aThis) {
@@ -171,20 +187,35 @@ public final class Player extends Entity {
 
         switch (direction) {
             case "up" ->
-                image = (spriteNum == 1) ? up1
-                        : (spriteNum == 2) ? up2 : (spriteNum == 3) ? up3 : (spriteNum == 4) ? up4 : null;
+            image = (spriteNum == 1) ? up1
+                : (spriteNum == 2) ? up2
+                : (spriteNum == 3) ? up3
+                : (spriteNum == 4) ? up4
+                : (spriteNum == 5) ? up5
+                : (spriteNum == 6) ? up6 : null;
             case "down" ->
-                image = (spriteNum == 1) ? down1
-                        : (spriteNum == 2) ? down2 : (spriteNum == 3) ? down3 : (spriteNum == 4) ? down4 : null;
+            image = (spriteNum == 1) ? down1
+                : (spriteNum == 2) ? down2
+                : (spriteNum == 3) ? down3
+                : (spriteNum == 4) ? down4
+                : (spriteNum == 5) ? down5
+                : (spriteNum == 6) ? down6 : null;
             case "left" ->
-                image = (spriteNum == 1) ? left1
-                        : (spriteNum == 2) ? left2 : (spriteNum == 3) ? left3 : (spriteNum == 4) ? left4 : null;
+            image = (spriteNum == 1) ? left1
+                : (spriteNum == 2) ? left2
+                : (spriteNum == 3) ? left3
+                : (spriteNum == 4) ? left4
+                : (spriteNum == 5) ? left5
+                : (spriteNum == 6) ? left6 : null;
             case "right" ->
-                image = (spriteNum == 1) ? right1
-                        : (spriteNum == 2) ? right2 : (spriteNum == 3) ? right3 : (spriteNum == 4) ? right4 : null;
+            image = (spriteNum == 1) ? right1
+                : (spriteNum == 2) ? right2
+                : (spriteNum == 3) ? right3
+                : (spriteNum == 4) ? right4
+                : (spriteNum == 5) ? right5
+                : (spriteNum == 6) ? right6 : null;
         }
 
         g2.drawImage(image, screenX, screenY, null);
     }
 }
-

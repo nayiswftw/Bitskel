@@ -10,8 +10,8 @@ public class KeyHandler implements KeyListener {
     // debug
     boolean checkDrawTime = false;
 
-    public KeyHandler(GamePanel gp){
-        this.gp=gp;
+    public KeyHandler(GamePanel gp) {
+        this.gp = gp;
     }
 
     @Override
@@ -39,17 +39,15 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_D) {
             rightPressed = true;
         }
-        
-        if (code == KeyEvent.VK_P) {
-           if(gp.gameState == gp.playState) {
-            gp.gameState = gp.pauseState;
-           }
-           else if (gp.gameState == gp.pauseState) {
-              gp.gameState = gp.playState;
-               
-           }
-        }
 
+        if (code == KeyEvent.VK_P) {
+            if (gp.gameState == gp.playState) {
+                gp.gameState = gp.pauseState;
+            } else if (gp.gameState == gp.pauseState) {
+                gp.gameState = gp.playState;
+
+            }
+        }
 
         // Debug
         if (code == KeyEvent.VK_T) {

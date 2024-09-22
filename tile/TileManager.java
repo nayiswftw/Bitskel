@@ -74,6 +74,7 @@ public final class TileManager {
             collision = collisionStatus.get(i).equals("true");
             setup(i, fileName, collision);
         }
+        
 
     }
 
@@ -88,6 +89,8 @@ public final class TileManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        
 
     }
 

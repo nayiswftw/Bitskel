@@ -3,6 +3,7 @@ package entity;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import javax.imageio.ImageIO;
 import main.GamePanel;
 import main.UtilityTool;
@@ -38,22 +39,13 @@ public class Entity {
         gp.uI.currentDialogue = dialogues[dialogueIndex];
         dialogueIndex++;
     
-        switch (gp.player.direction) {
-            case "up":
-                direction = "down";
-                break;
-            case "down":
-                direction = "up";
-                break;
-            case "left":
-                direction = "right";
-                break;
-            case "right":
-                direction = "left";
-                break;
-            default:
-                throw new AssertionError();
-        }
+        direction = switch (gp.player.direction) {
+            case "up" -> "down";
+            case "down" -> "up";
+            case "left" -> "right";
+            case "right" -> "left";
+            default -> throw new AssertionError();
+        };
     
      }
     
@@ -118,7 +110,7 @@ public class Entity {
         g2.drawImage(image, screenX, screenY, null);
     }
 }
- 
+    @SuppressWarnings("CallToPrintStackTrace")
     public BufferedImage setup(String imagePath) {
         UtilityTool uTool = new UtilityTool();
         BufferedImage image = null;
@@ -126,7 +118,7 @@ public class Entity {
         try {
             image = ImageIO.read(getClass().getResource("/res/player-walk/" + imagePath + ".png"));
             image = uTool.scaleImage(image, gp.tileSize, gp.tileSize);
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return image;

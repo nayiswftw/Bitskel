@@ -13,9 +13,11 @@ public class UI {
 
     public boolean messageOn = false;
     public String message = "";
-    int messageCounter = 0;
+    // int messageCounter = 0;
     public boolean gameFinished = false;
     public String currentDialogue = " ";
+    public int commandNum = 0;
+
 
     public UI(GamePanel gp) {
         this.gp = gp;
@@ -36,6 +38,10 @@ public class UI {
         g2.setFont(arial_40);
         g2.setColor(Color.white);
 
+        //title state
+        if(gp.gameState == gp.titleState) {
+            drawTitleScreen(g2);
+        }
         //Play state
         if (gp.gameState == gp.playState) {
             // do playstate stuff later
@@ -49,6 +55,57 @@ public class UI {
             drawDialogueScreen();
         }
     }
+    public void drawTitleScreen(Graphics2D g21){
+
+        g2.setColor(new Color(0,0,40));
+        g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+        //Title name
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD,70F));
+        String text = "Blue Boy Adventure" ;
+        int x = getXforCenteredText(text);
+        int y = gp.tileSize*3;
+
+        //Shadow
+        g2.setColor(Color.gray);
+        g2.drawString(text, x+5, y+5);
+        // Main color
+        g2.setColor(Color.white);
+        g2.drawString(text,x,y);
+
+        //Blue boy image
+        x = gp.screenWidth/2 - (gp.titleState*2)/2;
+        y += gp.tileSize*2;
+        g2.drawImage(gp.player.down1,x,y ,gp.tileSize*2,gp.tileSize*2,null);
+          
+        //Menu
+        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 40F));
+
+        text = "NEW GAME";
+        x = getXforCenteredText(text);
+        y += gp.tileSize*4;
+        g2.drawString(text,x,y);
+        if(commandNum == 0){
+            g2.drawString(">", x-gp.tileSize, y);
+        }
+
+
+        text = "LOAD GAME";
+        x = getXforCenteredText(text);
+        y += gp.tileSize;
+        g2.drawString(text,x,y);
+        if(commandNum == 1){
+        g2.drawString(">", x-gp.tileSize, y);
+        }
+
+        text = "QUIT GAME";
+        x = getXforCenteredText(text);
+        y += gp.tileSize;
+        g2.drawString(text,x,y);
+        if(commandNum == 2){
+        g2.drawString(">", x-gp.tileSize, y);
+        }
+    }
+     
 
     public void drawPauseScreen() {
 

@@ -4,6 +4,7 @@ import java.util.Random;
 import main.GamePanel;
 
 public class NPC_OldMan extends Entity {
+     @SuppressWarnings("OverridableMethodCallInConstructor")
      public NPC_OldMan(GamePanel gp){
         super(gp);
 

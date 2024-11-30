@@ -69,6 +69,7 @@ public final class Player extends Entity {
 
     }
 
+    @Override
     public void update() {
 
         if (moving == false) {

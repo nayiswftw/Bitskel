@@ -4,12 +4,16 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import object.OBJ_Heart;
+import object.SuperObject;
 
 public class UI {
 
     GamePanel gp;
     Graphics2D g2;
     Font arial_40, arial_80B;
+    BufferedImage heart_full, heart_half, heart_blank;
 
     public boolean messageOn = false;
     public String message = "";
@@ -25,6 +29,11 @@ public class UI {
         arial_40 = new Font("Arial", Font.PLAIN, 40);
         arial_80B = new Font("Arial", Font.BOLD, 80);
 
+        //create HUD Object
+        SuperObject heart = new OBJ_Heart(gp);
+        heart_full = heart.image;
+        heart_half = heart.image2;
+        heart_blank = heart.image3;
     }
 
     public void showMessage(String text) {
@@ -44,16 +53,50 @@ public class UI {
         }
         //Play state
         if (gp.gameState == gp.playState) {
-            // do playstate stuff later
+            drawPlayerLife();
+            
         }
         //pause state
         if (gp.gameState == gp.pauseState) {
+            drawPlayerLife();
             drawPauseScreen();
         }
         //dialogue state
         if (gp.gameState == gp.dialogueState) {
+            drawPlayerLife();
             drawDialogueScreen();
         }
+    }
+    public void drawPlayerLife(){
+
+        gp.player.life = 5;  // change
+        int x = gp.tileSize/2;
+        int y = gp.tileSize/2;
+        int i =0;
+
+        //Draw balnk heart 
+        while(i < gp.player.maxLife/2){
+            g2.drawImage(heart_blank,x,y,null);
+            i++;
+            x+= gp.tileSize;
+        }
+
+        //Reset
+        x = gp.tileSize/2;
+        y = gp.tileSize/2;
+        i =0;
+
+        //Draw current life 
+        while(i < gp.player.life){
+            g2.drawImage(heart_half,x,y,null);
+            i++;
+            if(i < gp.player.life){
+                g2.drawImage(heart_full,x,y,null);
+            }
+            i++;
+            x+= gp.tileSize;
+        }
+
     }
     public void drawTitleScreen(Graphics2D g21){
 

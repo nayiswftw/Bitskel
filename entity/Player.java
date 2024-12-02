@@ -37,11 +37,17 @@ public final class Player extends Entity {
 
     }
 
+
     public void setDefaultValues() { // set player's default values
         worldX = gp.tileSize * 13;
         worldY = gp.tileSize * 10;
         speed = 4;
         direction = "down";
+
+        //player status
+        maxLife = 6;
+        life= maxLife;
+        
     }
 
     public void getPlayerImage() {
